@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/auth/operations';
 import { selectUser } from '../../redux/auth/selectors';
+import { toast } from 'react-hot-toast';
 import styles from './UserMenu.module.css';
 
 const UserMenu = () => {
@@ -9,7 +10,14 @@ const UserMenu = () => {
   const user = useSelector(selectUser);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout())
+      .unwrap()
+      .then(() => {
+        toast.success('Logged out successfully');
+      })
+      .catch(() => {
+        toast.error('Failed to logout');
+      });
   };
 
   return (

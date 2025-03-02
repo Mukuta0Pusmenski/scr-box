@@ -3,26 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from '../../redux/contacts/operations';
 import ContactForm from '../../components/ContactForm/ContactForm';
 import ContactList from '../../components/ContactList/ContactList';
-import SearchBox from '../../components/SearchBox/SearchBox';
-import { selectIsLoggedIn } from '../../redux/auth/selectors';
-import styles from './ContactsPage.module.css';
+import { selectContacts, selectIsLoading, selectError } from '../../redux/contacts/selectors';
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(fetchContacts());
-    }
-  }, [dispatch, isLoggedIn]);
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
-    <div className={styles.container}>
+    <div>
       <h1>Contacts</h1>
       <ContactForm />
-      <SearchBox />
-      <ContactList />
+      {isLoading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      <ContactList contacts={contacts} />
     </div>
   );
 };
