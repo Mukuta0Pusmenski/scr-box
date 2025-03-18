@@ -1,11 +1,21 @@
-export const selectContacts = (state) => state.contacts.items;
-export const selectIsLoading = (state) => state.contacts.isLoading;
-export const selectError = (state) => state.contacts.error;
+// Вибір всіх контактів
+export const selectContacts = state => state.contacts.items;
 
-// Функція для вибору відфільтрованих контактів
-export const selectFilteredContacts = (state) => {
-  const { items, filter } = state.contacts;
-  return items.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
-};
+// Вибір статусу завантаження
+export const selectLoading = state => state.contacts.loading;
+
+// Вибір помилки
+export const selectError = state => state.contacts.error;
+
+// Додатковий селектор для фільтрованих контактів
+import { createSelector } from '@reduxjs/toolkit';
+import { selectNameFilter } from '../filters/selectors';
+
+export const selectFilteredContacts = createSelector(
+  [selectContacts, selectNameFilter],
+  (contacts, filter) => {
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }
+);

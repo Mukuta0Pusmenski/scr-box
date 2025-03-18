@@ -1,48 +1,45 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { addContact } from '../../redux/contacts/contactsOps';
-import { toast } from 'react-hot-toast';
-import styles from './ContactForm.module.css';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsOps';
+import './ContactForm.module.css';
 
-const ContactSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  number: Yup.string().required('Number is required'),
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .required('Name is required')
+    .min(3, 'Minimum 3 characters')
+    .max(50, 'Maximum 50 characters'),
+  number: Yup.string()
+    .required('Number is required')
+    .min(3, 'Minimum 3 characters')
+    .max(50, 'Maximum 50 characters'),
 });
 
 const ContactForm = () => {
   const dispatch = useDispatch();
 
-  const handleSubmit = (values, { resetForm }) => {
-    dispatch(addContact(values))
-      .unwrap()
-      .then(() => {
-        toast.success('Contact added successfully');
-        resetForm();
-      })
-      .catch(() => {
-        toast.error('Failed to add contact');
-      });
-  };
-
   return (
     <Formik
       initialValues={{ name: '', number: '' }}
-      validationSchema={ContactSchema}
-      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
+      onSubmit={(values, { resetForm }) => {
+        dispatch(addContact(values));
+        resetForm();
+      }}
     >
-      {({ isSubmitting }) => (
-        <Form className={styles.form}>
-          <div className={styles.formGroup}>
+      {() => (
+        <Form className="ContactForm">
+          <div>
             <label htmlFor="name">Name</label>
-            <Field type="text" name="name" />
+            <Field name="name" type="text" placeholder="Name" />
+            <ErrorMessage name="name" component="div" className="error" />
           </div>
-          <div className={styles.formGroup}>
+          <div>
             <label htmlFor="number">Number</label>
-            <Field type="text" name="number" />
+            <Field name="number" type="tel" placeholder="Number" />
+            <ErrorMessage name="number" component="div" className="error" />
           </div>
-          <button type="submit" disabled={isSubmitting}>Add Contact</button>
+          <button type="submit">Add contact</button>
         </Form>
       )}
     </Formik>

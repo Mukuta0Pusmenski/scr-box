@@ -1,19 +1,16 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
+import AppBar from '../AppBar/AppBar';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <div>
-      <header>
-        {/* Ваш заголовок */}
-      </header>
+      <AppBar />
       <main>
-        {children}
+        <Outlet />
       </main>
-      <footer>
-        {/* Ваш підвал */}
-      </footer>
     </div>
   );
 };
 
-export default Layout; // Переконайтеся, що компонент експортується за замовчуванням
+export default Layout;

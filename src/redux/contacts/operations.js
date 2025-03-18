@@ -1,38 +1,44 @@
-import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
+// Налаштування базового URL для бекенду
+axios.defaults.baseURL = 'https://connections-api.goit.global';
+
+// Отримати всі контакти
 export const fetchContacts = createAsyncThunk(
-  'contacts/fetchContacts',
-  async (_, { rejectWithValue }) => {
+  'contacts/fetchAll',
+  async (_, thunkAPI) => {
     try {
       const response = await axios.get('/contacts');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
+// Додати новий контакт
 export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async (contact, { rejectWithValue }) => {
+  async (contact, thunkAPI) => {
     try {
       const response = await axios.post('/contacts', contact);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
+// Видалити контакт
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async (contactId, { rejectWithValue }) => {
+  async (contactId, thunkAPI) => {
     try {
-      const response = await axios.delete(`/contacts/${contactId}`);
-      return response.data;
+      await axios.delete(`/contacts/${contactId}`);
+      return contactId;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );

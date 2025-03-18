@@ -1,10 +1,5 @@
-// src/pages/HomePage/HomePage.jsx
 const HomePage = () => {
-  return (
-    <div>
-      <h1>Welcome to the Contacts App</h1>
-    </div>
-  );
+  return <h1>Welcome to the Phonebook App!</h1>;
 };
 
 export default HomePage;

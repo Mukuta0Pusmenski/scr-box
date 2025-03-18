@@ -1,18 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import contactsReducer from './contacts/contactsSlice';
-import filtersReducer from './filters/filtersSlice';
-import { authReducer } from './auth/authSlice';
+import contactsReducer from './contacts/slice';
+import filtersReducer from './filters/slice';
+import authReducer from './auth/slice';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     contacts: contactsReducer,
     filters: filtersReducer,
     auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
 });
 
 export default store;
